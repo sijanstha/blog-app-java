@@ -2,8 +2,10 @@ package com.blog.app.service.impl;
 
 import com.blog.app.domains.UserDomain;
 import com.blog.app.entity.UserEntity;
+import com.blog.app.exception.UserNotFoundException;
 import com.blog.app.repo.UserRepository;
 import com.blog.app.service.UserService;
+import java.util.Optional;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -39,11 +41,11 @@ public class UserServiceImpl implements UserService {
 
   @Override
   public UserDomain getById(int userId) {
-    UserEntity entity = this.userRepository.getById(userId);
-    if (entity == null) {
-      // throw exception
+    Optional<UserEntity> optionalUserEntity = this.userRepository.findById(userId);
+    if (!optionalUserEntity.isPresent()) {
+      throw new UserNotFoundException("US001", "User not found");
     }
-    return this.mapper.map(entity, UserDomain.class);
+    return this.mapper.map(optionalUserEntity.get(), UserDomain.class);
   }
 
 }

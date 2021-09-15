@@ -1,5 +1,7 @@
 package com.blog.app.domains;
 
+import com.blog.app.exception.BadRequestException;
+
 public class LikeUnlikeDomain {
 
   private int userId;
@@ -32,14 +34,14 @@ public class LikeUnlikeDomain {
 
   public void validate(){
     if(this.userId == 0 || this.userId < 0){
-      // throw exception
+      throw new BadRequestException("LUS001", "Invlaid user id");
     }
     if(this.postId == 0 || this.postId < 0){
-      // throw exception
+      throw new BadRequestException("LUS002", "Invlaid post id");
     }
 
     if(this.likeUnlike != 1 && this.likeUnlike != -1){
-      // throw exception
+      throw new BadRequestException("LUS003", "Invlaid like unlike count");
     }
 
   }

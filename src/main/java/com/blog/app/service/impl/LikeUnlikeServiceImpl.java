@@ -51,16 +51,19 @@ public class LikeUnlikeServiceImpl implements LikeUnlikeService {
 
   @Override
   public Integer getPostLikeCount(int postId) {
-    return this.getPostLikeCount(postId);
+    this.postService.getById(postId);
+    return this.likeUnlikeRepository.getLikeCountOfPost(postId);
   }
 
   @Override
   public Integer getPostUnlikeCount(int postId) {
-    return this.getPostUnlikeCount(postId);
+    this.postService.getById(postId);
+    return this.likeUnlikeRepository.getUnLikeCountOfPost(postId);
   }
 
   @Override
   public Map<String, Integer> getLikeUnlikeCountOnPost(int postId) {
+    this.postService.getById(postId);
     Integer likeCount = this.getPostLikeCount(postId);
     Integer unlikeCount = this.getPostUnlikeCount(postId);
 
