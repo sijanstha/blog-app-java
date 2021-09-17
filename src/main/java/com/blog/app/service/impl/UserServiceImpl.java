@@ -7,21 +7,21 @@ import com.blog.app.repo.UserRepository;
 import com.blog.app.service.UserService;
 import java.util.Optional;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
 public class UserServiceImpl implements UserService {
+  private final UserRepository userRepository;
+  private final ModelMapper mapper;
+  private final BCryptPasswordEncoder encoder;
 
-  @Autowired
-  private UserRepository userRepository;
-
-  @Autowired
-  private ModelMapper mapper;
-
-  @Autowired
-  private BCryptPasswordEncoder encoder;
+  public UserServiceImpl(UserRepository userRepository, ModelMapper mapper,
+      BCryptPasswordEncoder encoder) {
+    this.userRepository = userRepository;
+    this.mapper = mapper;
+    this.encoder = encoder;
+  }
 
   @Override
   public UserDomain add(UserDomain domain) {

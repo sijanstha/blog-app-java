@@ -13,19 +13,22 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 @Service
 public class PostServiceImpl implements PostService {
 
-  @Autowired
-  private PostRepository postRepository;
-  @Autowired
-  private ModelMapper mapper;
-  @Autowired
-  private UserRepository userRepository;
+  private final PostRepository postRepository;
+  private final ModelMapper mapper;
+  private final UserRepository userRepository;
+
+  public PostServiceImpl(PostRepository postRepository, ModelMapper mapper,
+      UserRepository userRepository) {
+    this.postRepository = postRepository;
+    this.mapper = mapper;
+    this.userRepository = userRepository;
+  }
 
   @Override
   public PostDomain add(PostDomain domain) {
@@ -50,7 +53,7 @@ public class PostServiceImpl implements PostService {
 
   @Override
   public PostDomain getById(int id) {
-    Optional<PostEntity> optionalEntity = this.postRepository.findById(id);
+    Optional<PostEntity> optionalEntity = this.postRepository.findByIdAndDeletedFalse(id);
     if (optionalEntity.isEmpty()) {
       throw new PostNotFoundException("PS001", "Post not found");
     }

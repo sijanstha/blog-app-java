@@ -72,4 +72,21 @@ public class LikeUnlikeServiceImpl implements LikeUnlikeService {
     map.put("unlikeCount", unlikeCount == null ? 0 : unlikeCount);
     return map;
   }
+
+  public boolean checkIfUserActionExistsOnSpecPost(int postId, int userId) {
+    return this.likeUnlikeRepository.existsByPostIdAndUserIdAndDeletedFalse(postId, userId);
+  }
+
+  public LikeUnlikeDomain getByPostIdAndUserId(int postId, int userId) {
+    LikeUnlikeEntity entity = this.likeUnlikeRepository.fetchUserInteractionOnPost(postId, userId);
+    if (entity == null) {
+      return null;
+    }
+
+    LikeUnlikeDomain domain = new LikeUnlikeDomain();
+    domain.setLikeUnlike(entity.getLikeUnlike());
+    domain.setUserId(entity.getUserId());
+    domain.setPostId(entity.getPostId());
+    return domain;
+  }
 }
