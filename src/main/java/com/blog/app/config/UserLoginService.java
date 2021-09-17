@@ -25,8 +25,7 @@ public class UserLoginService implements UserDetailsService {
 		if(email == null) {
 			throw new UsernameNotFoundException("Email doesn't exists.");
 		}
-		
-		
+
 		return new CurrentlyLoggedInUser(email, 
 				entity.getPassword(), 
 				List.of(new SimpleGrantedAuthority(entity.getRole())),

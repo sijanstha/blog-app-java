@@ -28,4 +28,6 @@ public interface LikeUnlikeRepository extends CrudRepository<LikeUnlikeEntity, I
       + "having fk_post_id = ?1", nativeQuery = true)
   Integer getUnLikeCountOfPost(int postId);
 
+  Boolean existsByPostIdAndUserIdAndDeletedFalse(int postId, int userId);
+
 }

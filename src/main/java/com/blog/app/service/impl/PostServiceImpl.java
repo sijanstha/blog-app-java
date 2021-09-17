@@ -50,7 +50,7 @@ public class PostServiceImpl implements PostService {
 
   @Override
   public PostDomain getById(int id) {
-    Optional<PostEntity> optionalEntity = this.postRepository.findById(id);
+    Optional<PostEntity> optionalEntity = this.postRepository.findByIdAndDeletedFalse(id);
     if (optionalEntity.isEmpty()) {
       throw new PostNotFoundException("PS001", "Post not found");
     }
