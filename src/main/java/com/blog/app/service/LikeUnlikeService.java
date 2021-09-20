@@ -12,4 +12,6 @@ public interface LikeUnlikeService {
   Integer getPostUnlikeCount(int postId);
 
   Map<String, Integer> getLikeUnlikeCountOnPost(int postId);
+
+  LikeUnlikeDomain getByPostIdAndUserId(int postId, int userId);
 }

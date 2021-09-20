@@ -1,11 +1,13 @@
 package com.blog.app.controller;
 
+import com.blog.app.config.CurrentlyLoggedInUser;
 import com.blog.app.domains.LikeUnlikeDomain;
 import com.blog.app.service.LikeUnlikeService;
 import java.util.Map;
-import javax.websocket.server.PathParam;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,7 +23,15 @@ public class LikeUnlikeController {
   private LikeUnlikeService service;
 
   @PostMapping
-  public ResponseEntity<?> processLikeUnlike(@RequestBody LikeUnlikeDomain domain) {
+  public ResponseEntity<?> processLikeUnlike(@RequestBody LikeUnlikeDomain domain,
+      Authentication authentication) {
+
+    if (authentication == null) {
+      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+    }
+
+    CurrentlyLoggedInUser user = (CurrentlyLoggedInUser) authentication.getPrincipal();
+    domain.setUserId(user.getUserId());
     this.service.performLikeUnlikeOnPost(domain);
     return ResponseEntity.ok("SUCCESS");
   }
@@ -37,8 +47,18 @@ public class LikeUnlikeController {
   }
 
   @GetMapping("/{postId}")
-  public Map<String, Integer> getPostLikeUnlikeCount(@PathVariable("postId") int postId) {
-    return this.service.getLikeUnlikeCountOnPost(postId);
+  public Map<String, Integer> getPostLikeUnlikeCount(@PathVariable("postId") int postId,
+      Authentication authentication) {
+    Map<String, Integer> map = this.service.getLikeUnlikeCountOnPost(postId);
+    if (authentication != null) {
+      CurrentlyLoggedInUser user = (CurrentlyLoggedInUser) authentication.getPrincipal();
+      LikeUnlikeDomain domain = this.service.getByPostIdAndUserId(postId, user.getUserId());
+      if (domain != null) {
+        map.put("userAction", domain.getLikeUnlike());
+      }
+    }
+
+    return map;
   }
 
 }

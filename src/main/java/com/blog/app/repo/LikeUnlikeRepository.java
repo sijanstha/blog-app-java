@@ -9,8 +9,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface LikeUnlikeRepository extends CrudRepository<LikeUnlikeEntity, Integer> {
 
-  LikeUnlikeEntity findByPostIdAndUserIdAndDeletedFalse(int postId, int userId);
-
   @Query(value = "select l FROM LikeUnlikeEntity l where l.postId = ?1 and l.userId=?2 and l.deleted=false")
   LikeUnlikeEntity fetchUserInteractionOnPost(int postid, int userid);
 
@@ -28,4 +26,5 @@ public interface LikeUnlikeRepository extends CrudRepository<LikeUnlikeEntity, I
       + "having fk_post_id = ?1", nativeQuery = true)
   Integer getUnLikeCountOfPost(int postId);
 
+  LikeUnlikeEntity findByPostIdAndUserIdAndDeletedFalse(int postId, int userId);
 }
