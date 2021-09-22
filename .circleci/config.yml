@@ -1,4 +1,7 @@
-version: 2.0
+version: 2.1
+orbs:
+  aws-ecr: circleci/aws-ecr@7.2.0
+
 jobs:
   build:
     docker:
@@ -39,3 +42,19 @@ workflows:
       - test:
           requires:
             - build
+      - aws-ecr/build-and-push-image:
+          account-url: $AWS_ECR_ACCOUNT_URL
+          aws-access-key-id: $AWS_ACCESS_KEY_ID
+          aws-secret-access-key: $AWS_SECRET_ACCESS_KEY
+          context: blog-app-context
+          create-repo: true
+          dockerfile: Dockerfile
+          no-output-timeout: 20m
+          path: .
+          profile-name: default
+          region: $AWS_REGION
+          repo: blog-app-repo
+          skip-when-tags-exist: false
+          tag: 'latest'
+          requires:
+            - test
