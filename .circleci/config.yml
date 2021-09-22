@@ -58,3 +58,7 @@ workflows:
           tag: 'latest'
           requires:
             - test
+          filters:
+            branches:
+              only:
+                - /dev/
