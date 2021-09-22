@@ -50,7 +50,6 @@ workflows:
           create-repo: true
           dockerfile: Dockerfile
           no-output-timeout: 20m
-          path: .
           profile-name: default
           region: AWS_REGION
           repo: blog-app-repo
