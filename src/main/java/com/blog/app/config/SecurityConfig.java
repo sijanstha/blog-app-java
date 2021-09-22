@@ -22,20 +22,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	// FROM WHERE USER SHOULD BE FETCHED
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-		// Inmemeory, JpaAuthentication(db)
-		// UserService Interface implements 
-		// loadByUsername(String username)
-		// UserNotFound ->
-//		auth.inMemoryAuthentication()
-//			.withUser("sijan")
-//			.password(encoder.encode("password"))
-//			.roles("USER");
-//		
-//		auth.inMemoryAuthentication()
-//			.withUser("admin")
-//			.password(encoder.encode("admin"))
-//			.roles("ADMIN");
-		
 		auth.userDetailsService(userDetailsService).passwordEncoder(encoder);
 	}
 
